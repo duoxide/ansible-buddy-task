@@ -50,3 +50,4 @@
         - { src: "Monday.txt.j2", dest: "Monday.txt" }
         - { src: "Tuesday.txt.j2", dest: "Tuesday.txt" }
         - { src: "Wednesday.txt.j2", dest: "Wednesday.txt" }
+...
