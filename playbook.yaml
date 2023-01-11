@@ -11,7 +11,7 @@
 
     - name: Check if directory exists
       stat:
-        path: /home/ubuntu/new-dir
+        path: "{{ dir_path }}/{{ dir_name }}"
       register: result
 
     - name: Warn if exists
@@ -22,37 +22,30 @@
     - name: Delete directory if exists
       file:
         state: absent
-        path: /home/ubuntu/new-dir
+        path: "{{ dir_path }}/{{ dir_name }}"
       when: result.stat.exists == true
     
-    - name: Check if directory exists
-      stat:
-        path: /home/ubuntu/new-dir
-      register: result
-      when: result.stat.exists == true
-
     - name: Create new directory
       file:
-        path: /home/ubuntu/new-dir
+        path: "{{ dir_path }}/{{ dir_name }}"
         state: directory
         owner: ubuntu
         group: ubuntu
         mode: 0755
-      when: result.stat.exists == false
 
     # 2. Create file with contents from variables
 
     - name: Create file with content from vars
       copy:
         content: "{{ text }}"
-        dest: "/home/ubuntu/new-dir/new-file.txt"
+        dest: "{{ dir_path }}/{{ dir_name }}/{{ file_name }}"
 
     # 3. Create several files from seperate jinja templates
 
     - name: Create several files using loop and jinja templates
       template:
         src: "./jinja/{{ item.src }}"
-        dest: "/home/ubuntu/new-dir/{{ item.dest }}"
+        dest: "{{ dir_path }}/{{ dir_name }}/{{ item.dest }}"
       loop:
         - { src: "Monday.txt.j2", dest: "Monday.txt" }
         - { src: "Tuesday.txt.j2", dest: "Tuesday.txt" }
